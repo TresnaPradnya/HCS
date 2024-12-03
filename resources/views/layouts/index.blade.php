@@ -158,7 +158,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('profile.index') }}" class="nav-link">
+                                <a href="{{ route('al.index') }}"
+                                    class="nav-link {{ Request::is('activity-log*') ? 'active' : '' }}">
 
                                     <i class="nav-icon fas fa-journal-whills"></i>
                                     <p>
