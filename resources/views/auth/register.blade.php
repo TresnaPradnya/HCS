@@ -1,6 +1,6 @@
 @extends('layouts.auth')
-@section('content')
-    <div class="login-box">
+@section('content') 
+    <div class="login-box"> 
         <!-- /.login-logo -->
         <div class="card card-outline card-danger">
             <div class="card-header text-center">
@@ -17,7 +17,7 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                @else
+                @else 
                     <p class="login-box-msg">Register a new membership</p>
                 @endif
                 <form action="{{ route('register') }}" method="post">
@@ -116,15 +116,15 @@
                             style="width: 100%;" name="commuting_method_id">
                             <option value="">-- Select Commuting Methods --</option>
                             @foreach ($cm as $item)
-                                <option value="{{ $item->id }}"
+                                <option value="{{ $item->id }}" 
                                     {{ old('commuting_method_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}
                                 </option>
                             @endforeach
-                        </select>
+                        </select> 
                         @error('commuting_method_id')
                             <span id="commuting_method_id" class="error invalid-feedback">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> 
                     <div class="form-group">
                         <select id="energy_source_id"
                             class="form-control select2bs4 @error('energy_source_id') is-invalid @enderror"
@@ -134,7 +134,7 @@
                                 <option value="{{ $item->id }}"
                                     {{ old('energy_source_id') == $item->id ? 'selected' : '' }}>{{ $item->name }}
                                 </option>
-                            @endforeach
+                            @endforeach 
                         </select>
                         @error('energy_source_id')
                             <span id="energy_source_id" class="error invalid-feedback">{{ $message }}</span>
@@ -160,14 +160,14 @@
                             <button type="submit" class="btn btn-danger btn-block">Register</button>
                         </div>
                         <!-- /.col -->
-                    </div>
+                    </div> 
                 </form>
             </div>
-            <div class="card-footer">
+            <div class="card-footer"> 
                 <div class="social-auth-links text-left mt-2 mb-3">
                     Already have an account? <strong><a href="{{ route('login') }}">Login</a></strong>
                 </div>
-            </div>
+            </div> 
             <!-- /.card-body -->
         </div>
         <!-- /.card -->

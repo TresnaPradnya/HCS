@@ -1,7 +1,7 @@
 @extends('layouts.index')
 @section('title')
     <strong>
-        Dashboard
+        Dashboard 
     </strong>
 @endsection
 @section('content')

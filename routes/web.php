@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommutingMethodController;
 use App\Http\Controllers\DietaryPreferenceController;
@@ -30,6 +31,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middle
 
 
 Route::resource('profile', ProfileUser::class)->names('profile')->middleware('auth');
+Route::resource('activity-log', ActivityLogController::class)->names('al')->middleware('auth');
 
 Route::resource('master-data/energy_sources', EnergySourceController::class)->names('es');
 Route::resource('master-data/commuting_method', CommutingMethodController::class)->names('cm');

@@ -1,5 +1,5 @@
-@extends('layouts.auth')
-@section('content')
+@extends('layouts.auth')  <!-- ini dipanggil dari layout -->
+@section('content') <!-- ini dipanggil dari layout -->
     <div class="login-box">
         <!-- /.login-logo -->
         <div class="card card-outline card-danger">

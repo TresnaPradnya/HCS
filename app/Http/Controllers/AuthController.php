@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\CommutingMethodsModel;
 use App\Models\DietaryPreferencesModel;
-use App\Models\EnergySourceModel;
-use App\Models\User;
+use App\Models\EnergySourceModel; 
+use App\Models\User; 
 use App\Models\UserDetailModel;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -15,38 +15,42 @@ use Illuminate\Support\Facades\DB;
 class AuthController extends Controller
 {
     //
-
+    //function untuk menampilkan halaman login
     public function login()
     {
         return view('auth.login');
     }
 
+    //function untuk melakukan mekanisme login, untuk memvalidasi data yang diinputkan oleh user
     public function loginAttempt(Request $request)
     {
+        // ini rulesnya
         $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
-        $credentials = $request->only('username', 'password');
-        $remember = $request->remember;
+        $credentials = $request->only('username', 'password'); // data yang dibuhkan oleh user ketika akan login
+        $remember = $request->remember; // ini untuk remember me
+        // fungsi untuk melakukan login
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }
         return redirect()->back()->with([
-            'error' => 'Invalid credentials'
+            'error' => 'Invalid credentials' // kalau login gagal
         ]);
     }
 
 
-    public function register()
+    // function untuk menampilkan halaman register
+    public function register() 
     {
         $data = [
-            'cm' => CommutingMethodsModel::all(),
+            'cm' => CommutingMethodsModel::all(), 
             'es' => EnergySourceModel::all(),
             'dp' => DietaryPreferencesModel::all(),
         ];
-        return view('auth.register', $data);
+        return view('auth.register', $data); // mengirimkan data ke view register
     }
 
     public function registerAttempt(Request $request)
