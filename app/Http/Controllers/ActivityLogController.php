@@ -18,68 +18,14 @@ class ActivityLogController extends Controller
     public function index()
     {
         //
-        $activity_logs = ActivityLog::with(
-            'user',
-            'commutingMethod',
-            'dietaryPreference',
-            'energySource'
-        )->get();
-
-        // Calculate Transportation Footprint
-        $transportation_footprint = $activity_logs->sum(function ($log) {
-            return $log->commuting_method_value * ($log->commutingMethod->value ?? 0);
-        });
-
-        // Calculate Energy Footprint
-        $energy_footprint = $activity_logs->sum(function ($log) {
-            return $log->energy_source_value * ($log->energySource->value ?? 0);
-        });
-
-        // Calculate Dietary Footprint
-        $diet_footprint = $activity_logs->sum(function ($log) {
-            return $log->dietary_preference_value * ($log->dietaryPreference->value ?? 0);
-        });
-
-        // Total Carbon Footprint
-        $total_footprint = $transportation_footprint + $energy_footprint + $diet_footprint;
-
-        // Prepare historical data grouped by date
-        $historicalData = $activity_logs->groupBy('date');
-        $dates = $historicalData->keys(); // Extract unique dates
-
-        // Prepare historical footprint data for charting (System Response: Historical insights)
-        $transportation_history = $historicalData->map(function ($logs) {
-            return $logs->sum(function ($log) {
-                return $log->commuting_method_value * ($log->commutingMethod->value ?? 0);
-            });
-        })->values();
-
-        $energy_history = $historicalData->map(function ($logs) {
-            return $logs->sum(function ($log) {
-                return $log->energy_source_value * ($log->energySource->value ?? 0);
-            });
-        })->values();
-
-        $diet_history = $historicalData->map(function ($logs) {
-            return $logs->sum(function ($log) {
-                return $log->dietary_preference_value * ($log->dietaryPreference->value ?? 0);
-            });
-        })->values();
-
-        // Add the footprint calculations to the existing $data array
         $data = [
-            'activity_logs' => $activity_logs,
-            'transportation_footprint' => $transportation_footprint,
-            'energy_footprint' => $energy_footprint,
-            'diet_footprint' => $diet_footprint,
-            'total_footprint' => $total_footprint,
-            'dates' => $dates,
-            'transportation_history' => $transportation_history,
-            'energy_history' => $energy_history,
-            'diet_history' => $diet_history
+            'activity_logs' => ActivityLog::with(
+                'user',
+                'commutingMethod',
+                'dietaryPreference',
+                'energySource'
+            )->get(),
         ];
-
-        // Return the view with the activity logs and footprint data
         return view('activity_log.index', $data);
     }
 
