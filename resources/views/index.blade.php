@@ -80,6 +80,67 @@
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Data for the Pie Chart
+        const pieChartData = {
+            labels: ['Transportation', 'Energy', 'Diet'],
+            datasets: [{
+                data: [
+                    {{ $transportation_footprint }},
+                    {{ $energy_footprint }},
+                    {{ $diet_footprint }}
+                ],
+                backgroundColor: ['#007bff', '#28a745', '#dc3545']
+            }]
+        };
+
+        // Pie Chart Configuration
+        const pieChartConfig = {
+            type: 'pie',
+            data: pieChartData
+        };
+
+        // Render Pie Chart
+        const footprintPieChart = new Chart(document.getElementById('footprintPieChart'), pieChartConfig);
+
+        // Data for the Line Chart (Historical Trends)
+        const lineChartData = {
+            labels: @json($dates->toArray()),  // Convert to array before passing
+            datasets: [{
+                label: 'Transportation',
+                data: @json($transportation_history),
+                borderColor: '#007bff',
+                fill: false
+            },
+            {
+                label: 'Energy',
+                data: @json($energy_history),
+                borderColor: '#28a745',
+                fill: false
+            },
+            {
+                label: 'Diet',
+                data: @json($diet_history),
+                borderColor: '#dc3545',
+                fill: false
+            }]
+        };
+
+        // Line Chart Configuration
+        const lineChartConfig = {
+            type: 'line',
+            data: lineChartData,
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Date' } },
+                    y: { title: { display: true, text: 'kg CO₂' } }
+                }
+            }
+        };
+
+        // Render Line Chart
+        const footprintLineChart = new Chart(document.getElementById('footprintLineChart'), lineChartConfig);
+    </script>
 </div>
-@endsection
 @endsection
