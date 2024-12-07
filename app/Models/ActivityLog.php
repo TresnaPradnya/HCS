@@ -16,6 +16,15 @@ class ActivityLog extends Model
         'commuting_method_id',
         'dietary_preference_id',
         'energy_source_id',
+        'commuting_method_value',
+        'dietary_preference_value',
+        'energy_source_value',
+    ];
+
+    protected $casts = [
+        'commuting_method_value' => 'double',
+        'dietary_preference_value' => 'double',
+        'energy_source_value' => 'double',
     ];
 
     public function commutingMethod()
