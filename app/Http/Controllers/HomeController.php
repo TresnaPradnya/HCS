@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     //
     public function index(Request $request)
     {
-        // Actor Action: User selects a start and end date for viewing their carbon footprint.
         $startDate = $request->query('start_date', now()->toDateString());
         $endDate = $request->query('end_date', now()->toDateString());
 
-        // System Response: Fetch activity logs based on user selection of date range.
         $activityLogs = ActivityLog::with('commutingMethod', 'dietaryPreference', 'energySource')
             ->where('user_id', Auth::id())
             ->whereBetween('date', [$startDate, $endDate])
