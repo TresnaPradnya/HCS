@@ -1,8 +1,85 @@
 @extends('layouts.index')
 @section('title')
     <strong>
-        Dashboard 
+        Carbon Footprint Dashboard 
     </strong>
 @endsection
+
 @section('content')
+<div class="container mt-5">
+
+    <!-- Date Range Picker Section (Actor Action) -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form action="{{ route('home') }}" method="GET" class="form-inline">
+                <label for="start_date" class="mr-2">Start Date:</label>
+                <input type="date" name="start_date" id="start_date" class="form-control mr-2" value="{{ $startDate }}">
+                <label for="end_date" class="mr-2">End Date:</label>
+                <input type="date" name="end_date" id="end_date" class="form-control mr-2" value="{{ $endDate }}">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- System Response: Summary of Footprints (Breakdown) -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Transportation</h5>
+                    <h3 class="text-primary">{{ $transportation_footprint }} kg CO₂</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Energy</h5>
+                    <h3 class="text-success">{{ $energy_footprint }} kg CO₂</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Diet</h5>
+                    <h3 class="text-danger">{{ $diet_footprint }} kg CO₂</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Footprint (System Response: Overall Footprint Calculation) -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Carbon Footprint</h5>
+                    <h3 class="text-info">{{ $total_footprint }} kg CO₂</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Carbon Footprint Breakdown</h5>
+                    <canvas id="footprintPieChart"></canvas> <!-- Pie Chart Canvas -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Historical Trends</h5>
+                    <canvas id="footprintLineChart"></canvas> <!-- Line Chart Canvas -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
 @endsection
