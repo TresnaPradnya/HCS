@@ -68,6 +68,15 @@
                                     <span id="commuting_method_id" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="commuting_method_value">Commuting Method Value</label>
+                                <input type="number" class="form-control @error('commuting_method_value') is-invalid @enderror"
+                                    id="commuting_method_value" name="commuting_method_value"
+                                    value="{{ old('commuting_method_value') }}">
+                                @error('commuting_method_value')
+                                    <span id="commuting_method_value" class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -85,6 +94,15 @@
                                 </select>
                                 @error('energy_source_id')
                                     <span id="energy_source_id" class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="energy_source_value">Energy Source Value</label>
+                                <input type="number" class="form-control @error('energy_source_value') is-invalid @enderror"
+                                    id="energy_source_value" name="energy_source_value"
+                                    value="{{ old('energy_source_value') }}">
+                                @error('energy_source_value')
+                                    <span id="energy_source_value" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
