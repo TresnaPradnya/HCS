@@ -18,14 +18,68 @@ class ActivityLogController extends Controller
     public function index()
     {
         //
+        $activity_logs = ActivityLog::with(
+            'user',
+            'commutingMethod',
+            'dietaryPreference',
+            'energySource'
+        )->get();
+
+        // Calculate Transportation Footprint
+        $transportation_footprint = $activity_logs->sum(function ($log) {
+            return $log->commuting_method_value * ($log->commutingMethod->value ?? 0);
+        });
+
+        // Calculate Energy Footprint
+        $energy_footprint = $activity_logs->sum(function ($log) {
+            return $log->energy_source_value * ($log->energySource->value ?? 0);
+        });
+
+        // Calculate Dietary Footprint
+        $diet_footprint = $activity_logs->sum(function ($log) {
+            return $log->dietary_preference_value * ($log->dietaryPreference->value ?? 0);
+        });
+
+        // Total Carbon Footprint
+        $total_footprint = $transportation_footprint + $energy_footprint + $diet_footprint;
+
+        // Prepare historical data grouped by date
+        $historicalData = $activity_logs->groupBy('date');
+        $dates = $historicalData->keys(); // Extract unique dates
+
+        // Prepare historical footprint data for charting (System Response: Historical insights)
+        $transportation_history = $historicalData->map(function ($logs) {
+            return $logs->sum(function ($log) {
+                return $log->commuting_method_value * ($log->commutingMethod->value ?? 0);
+            });
+        })->values();
+
+        $energy_history = $historicalData->map(function ($logs) {
+            return $logs->sum(function ($log) {
+                return $log->energy_source_value * ($log->energySource->value ?? 0);
+            });
+        })->values();
+
+        $diet_history = $historicalData->map(function ($logs) {
+            return $logs->sum(function ($log) {
+                return $log->dietary_preference_value * ($log->dietaryPreference->value ?? 0);
+            });
+        })->values();
+
+        // Add the footprint calculations to the existing $data array
         $data = [
-            'activity_logs' => ActivityLog::with(
-                'user',
-                'commutingMethod',
-                'dietaryPreference',
-                'energySource'
-            )->get(),
+            'activity_logs' => $activity_logs,
+            'transportation_footprint' => $transportation_footprint,
+            'energy_footprint' => $energy_footprint,
+            'diet_footprint' => $diet_footprint,
+            'total_footprint' => $total_footprint,
+            'dates' => $dates,
+            'transportation_history' => $transportation_history,
+            'energy_history' => $energy_history,
+            'diet_history' => $diet_history
         ];
+
+        // Return the view with the activity logs and footprint data
         return view('activity_log.index', $data);
     }
 
@@ -53,14 +107,19 @@ class ActivityLogController extends Controller
             'commuting_method_id' => 'required|exists:commuting_methods,id',
             'energy_source_id' => 'required|exists:energy_sources,id',
             'dietary_preference_id' => 'required|exists:dietary_preferences,id',
-            'date' => 'required|date'
+            'date' => 'required|date',
+            'commuting_method_value' => 'required|numeric',
+            'energy_source_value' => 'required|numeric'
         ]);
         ActivityLog::create([
             'user_id' =>Auth::id(),
             'commuting_method_id' => $request->commuting_method_id,
             'energy_source_id' => $request->energy_source_id,
             'dietary_preference_id' => $request->dietary_preference_id,
-            'date' => $request->date
+            'date' => $request->date,
+            'commuting_method_value' => $request->commuting_method_value,
+            'dietary_preference_value' => 1,
+            'energy_source_value' => $request->energy_source_value
         ]);
         return redirect()->route('al.index')->with([
             'success' => 'Activity log created successfully'
@@ -100,13 +159,18 @@ class ActivityLogController extends Controller
             'commuting_method_id' => 'required|exists:commuting_methods,id',
             'energy_source_id' => 'required|exists:energy_sources,id',
             'dietary_preference_id' => 'required|exists:dietary_preferences,id',
-            'date' => 'required|date'
+            'date' => 'required|date',
+            'commuting_method_value' => 'required|numeric',
+            'energy_source_value' => 'required|numeric'
         ]);
         $al = ActivityLog::find($id);
         $al->commuting_method_id = $request->commuting_method_id;
         $al->energy_source_id = $request->energy_source_id;
         $al->dietary_preference_id = $request->dietary_preference_id;
         $al->date = $request->date;
+        $al->commuting_method_value = $request->commuting_method_value;
+        $al->dietary_preference_value = 1;
+        $al->energy_source_value = $request->energy_source_value;
         $al->save();
         return redirect()->route('al.index')->with([
             'success' => 'Activity log updated successfully'
