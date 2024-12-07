@@ -22,7 +22,9 @@
                         <th class="text-center">No</th>
                         <th>Date</th>
                         <th>Commuting Method</th>
+                        <th>CM Value</th>
                         <th>Energy Source</th>
+                        <th>ES Value</th>
                         <th>Diet Preference</th>
                         <th class="text-center">Action</th>
                     </tr>
@@ -33,7 +35,9 @@
                             <td class="text-center">{{ $key + 1 }}</td>
                             <td>{{ $item->date }}</td>
                             <td>{{ $item->commutingMethod->name }}</td>
+                            <td>{{ $item->commuting_method_value }}</td>
                             <td>{{ $item->energySource->name }}</td>
+                            <td>{{ $item->energy_source_value }}</td>
                             <td>{{ $item->dietaryPreference->name }}</td>
                             <td class="text-center">
                                 <a href="{{ route('al.edit', $item->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
