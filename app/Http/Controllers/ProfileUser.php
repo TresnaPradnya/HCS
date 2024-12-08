@@ -37,7 +37,15 @@ class ProfileUser extends Controller
 
     public function update($id, Request $request)
     {
-
+        $request->validate([
+            'username' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'energy_source_id' => 'required',
+            'commuting_method_id' => 'required',
+            'dietary_preference_id' => 'required',
+        ]);
+        
         DB::beginTransaction();
         try {
             $user = User::find($id);
