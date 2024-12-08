@@ -50,28 +50,17 @@
                                     <span id="username" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
+                        </div><!--end of username-->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="dietary_preference_id">Dietary Preference</label>
-                                <select id="dietary_preference_id"
-                                    class="form-control select2bs4 @error('dietary_preference_id') is-invalid @enderror"
-                                    style="width: 100%;" name="dietary_preference_id">
-                                    <option value="">-- Select Dietary Preferences --</option>
-                                    @foreach ($dp as $item)
-                                        <option value="{{ $item->id }}"
-                                            {{ old('dietary_preference_id', $profile->userDetail->dietary_preference_id) == $item->id ? 'selected' : '' }}>
-                                            {{ $item->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('dietary_preference_id')
-                                    <span id="dietary_preference_id" class="error invalid-feedback">{{ $message }}</span>
+                                <label for="phone">Phone Number</label>
+                                <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                    id="phone" name="phone" value="{{ old('phone', $profile->phone) }}">
+                                @error('phone')
+                                    <span id="phone" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
+                        </div><!--end of phone number-->
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="commuting_method_id">Commuting Method</label>
@@ -90,7 +79,28 @@
                                     <span id="commuting_method_id" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
+                        </div><!--end of Commuting Method-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="dietary_preference_id">Dietary Preference</label>
+                                <select id="dietary_preference_id"
+                                    class="form-control select2bs4 @error('dietary_preference_id') is-invalid @enderror"
+                                    style="width: 100%;" name="dietary_preference_id">
+                                    <option value="">-- Select Dietary Preferences --</option>
+                                    @foreach ($dp as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ old('dietary_preference_id', $profile->userDetail->dietary_preference_id) == $item->id ? 'selected' : '' }}>
+                                            {{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('dietary_preference_id')
+                                    <span id="dietary_preference_id" class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div><!--end of Dietary Preference-->
+                    </div><!--end of row-->
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="energy_source_id">Energy Source</label>
