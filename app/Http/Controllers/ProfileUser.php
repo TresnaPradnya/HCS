@@ -45,6 +45,20 @@ class ProfileUser extends Controller
             'commuting_method_id' => 'required',
             'dietary_preference_id' => 'required',
         ]);
+
+        //Melakukan Pengecekan validasi username, email, dan phone
+        $userNameCheck = User::where('username', $request->username)->where('id', '!=', $id)->first();
+        if ($userNameCheck) {
+            return redirect()->back()->with('error', 'Username already exists');
+        }
+        $emailCheck = User::where('email', $request->email)->where('id', '!=', $id)->first();
+        if ($emailCheck) {
+            return redirect()->back()->with('error', 'Email already exists');
+        }
+        $phoneCheck = User::where('phone', $request->phone)->where('id', '!=', $id)->first();
+        if ($phoneCheck) {
+            return redirect()->back()->with('error', 'Phone already exists');
+        }
         
         DB::beginTransaction();
         try {
