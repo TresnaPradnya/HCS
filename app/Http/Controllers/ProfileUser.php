@@ -39,6 +39,7 @@ class ProfileUser extends Controller
     {
         $request->validate([
             'username' => 'required',
+            'phone'=>'required',
             'name' => 'required',
             'email' => 'required|email',
             'energy_source_id' => 'required',
