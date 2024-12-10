@@ -69,7 +69,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="commuting_method_value">Commuting Method Value</label>
+                                <label for="commuting_method_value">Commuting Method Value (in KM)</label>
                                 <input type="number" class="form-control @error('commuting_method_value') is-invalid @enderror"
                                     id="commuting_method_value" name="commuting_method_value"
                                     value="{{ old('commuting_method_value') }}">
@@ -97,7 +97,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="energy_source_value">Energy Source Value</label>
+                                <label for="energy_source_value">Energy Source Value (in kWh)</label>
                                 <input type="number" class="form-control @error('energy_source_value') is-invalid @enderror"
                                     id="energy_source_value" name="energy_source_value"
                                     value="{{ old('energy_source_value') }}">
