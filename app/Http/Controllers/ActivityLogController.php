@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\EnergySourceModel;
 use Illuminate\Routing\Controller;
 use App\Models\CommutingMethodsModel;
+use App\Models\HistoricalTracking;
 use App\Models\DietaryPreferencesModel;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,7 +49,7 @@ class ActivityLogController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input
         $request->validate([
             'commuting_method_id' => 'required|exists:commuting_methods,id',
             'energy_source_id' => 'required|exists:energy_sources,id',
@@ -57,8 +58,9 @@ class ActivityLogController extends Controller
             'commuting_method_value' => 'required|numeric',
             'energy_source_value' => 'required|numeric'
         ]);
-        ActivityLog::create([
-            'user_id' =>Auth::id(),
+
+        $activityLog = ActivityLog::create([
+            'user_id' => Auth::id(),
             'commuting_method_id' => $request->commuting_method_id,
             'energy_source_id' => $request->energy_source_id,
             'dietary_preference_id' => $request->dietary_preference_id,
@@ -67,10 +69,14 @@ class ActivityLogController extends Controller
             'dietary_preference_value' => 1,
             'energy_source_value' => $request->energy_source_value
         ]);
+
+
         return redirect()->route('al.index')->with([
-            'success' => 'Activity log created successfully'
+            'success' => 'Activity log created data successfully!'
         ]);
     }
+
+
 
     /**
      * Display the specified resource.

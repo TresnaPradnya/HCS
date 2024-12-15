@@ -112,6 +112,7 @@
                                 </p>
                             </a>
                         </li>
+
                         @role('admin')
                             <li class="nav-item">
                                 <a href="#" class="nav-link {{ Request::is('master-data*') ? 'active' : '' }}">
@@ -168,6 +169,17 @@
                                 </a>
                             </li>
                         @endrole
+
+                        <!-- Menu untuk Epic 6: View/Upload Educational Content -->
+                        <li class="nav-item">
+                            <a href="{{ route('educational-contents.index') }}"
+                                class="nav-link {{ Request::is('educational-contents*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Educational Content</p>
+                            </a>
+                        </li>
+
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
