@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileUser;
 use App\Http\Controllers\EducationalContentController;
 use App\Http\Controllers\HistoricalTrackingController;
+use App\Http\Controllers\RecommendationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,10 +33,14 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout')->middle
 
 Route::resource('profile', ProfileUser::class)->names('profile')->middleware('auth');
 Route::resource('activity-log', ActivityLogController::class)->names('al')->middleware('auth');
+Route::resource('recommendation', RecommendationController::class)->names('recommendation')->middleware('auth');
 
 Route::resource('master-data/energy_sources', EnergySourceController::class)->names('es');
 Route::resource('master-data/commuting_method', CommutingMethodController::class)->names('cm');
 Route::resource('master-data/dietary_preferences', DietaryPreferenceController::class)->names('dp');
+
+
+
 
 // Routes untuk Educational Content (Epic 6)
 Route::middleware('auth')->group(function () {

@@ -159,6 +159,15 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ route('recommendation.index') }}"
+                                    class="nav-link {{ Request::is('recommendation*') ? 'active' : '' }}">
+                                    <i class="nav-icon far fa-star"></i>
+                                    <p>
+                                        Recommendation
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('al.index') }}"
                                     class="nav-link {{ Request::is('activity-log*') ? 'active' : '' }}">
 
@@ -168,16 +177,16 @@
                                     </p>
                                 </a>
                             </li>
+                            <!-- Menu untuk Epic 6: View/Upload Educational Content -->
+                            <li class="nav-item">
+                                <a href="{{ route('educational-contents.index') }}"
+                                    class="nav-link {{ Request::is('educational-contents*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Educational Content</p>
+                                </a>
+                            </li>
                         @endrole
 
-                        <!-- Menu untuk Epic 6: View/Upload Educational Content -->
-                        <li class="nav-item">
-                            <a href="{{ route('educational-contents.index') }}"
-                                class="nav-link {{ Request::is('educational-contents*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-book"></i>
-                                <p>Educational Content</p>
-                            </a>
-                        </li>
 
 
                     </ul>
