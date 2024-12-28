@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class RecommendationController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
         $userId = Auth::id();
         $startDate = $request->query('start_date', now()->subMonth()->toDateString());
