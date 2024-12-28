@@ -13,10 +13,13 @@ class RecommendationController extends Controller
     public function index()
     {
         $userId = Auth::id();
+        $startDate = $request->query('start_date', now()->subMonth()->toDateString());
+        $endDate = $request->query('end_date', now()->toDateString());
 
         // Ambil aktivitas log pengguna berdasarkan user_id
         $result = ActivityLog::with(['commutingMethod', 'dietaryPreference', 'energySource'])
             ->where('user_id', $userId)
+            ->whereBetween('date', [$startDate, $endDate])
             ->get()
             ->groupBy('user_id')
             ->map(function ($item) {
@@ -45,6 +48,14 @@ class RecommendationController extends Controller
         // Ambil data pertama jika ada
         $data = $result->first();
 
-        return view('recommendation.index', compact('data'));
+        // Error handling jika tidak ada data
+        $data = $data ?? (object) [
+            'total_commuting' => 0,
+            'total_dietary' => 0,
+            'total_energy' => 0,
+            'total_activity_value' => 0,
+        ];
+
+        return view('recommendation.index', compact('data','startDate', 'endDate'));
     }
 }
