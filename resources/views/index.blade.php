@@ -21,6 +21,16 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form action="{{ route('recommendation.index') }}" method="GET" class="form-inline d-inline-block" id="recommendationForm">
+                <input type="hidden" name="start_date" id="hiddenStartDate" value="{{ $startDate }}">
+                <input type="hidden" name="end_date" id="hiddenEndDate" value="{{ $endDate }}">
+                <button type="submit" class="btn btn-success" id="recommendationButton">Get Recommendation</button>
+            </form>
+        </div>
+    </div>
+
     <!-- System Response: Summary of Footprints (Breakdown) -->
     <div class="row mb-4">
         <div class="col-md-4">
