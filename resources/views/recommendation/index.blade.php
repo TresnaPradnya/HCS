@@ -12,20 +12,22 @@
             'energy' => $data->total_energy,
         ];
 
-        $maxValue = max($values);
-        $recommendation = '';
-
-        if ($maxValue == $data->total_commuting) {
-            $recommendation =
-                'Commuting is your highest activity. Consider focusing on improving your transportation habits for better efficiency and health.';
-        } elseif ($maxValue == $data->total_dietary) {
-            $recommendation =
-                'Dietary habits are your strongest area. Keep up with your nutrition for sustained energy and well-being.';
-        } elseif ($maxValue == $data->total_energy) {
-            $recommendation =
-                'Energy levels are high. You are maintaining a good balance of energy intake, keep it up!';
-        }else{
-            $recommendation = 'No recommendation';
+        if ($data->total_commuting == 0 && $data->total_dietary == 0 && $data->total_energy == 0) {
+            $recommendation = 'No recommendation available. Please make sure there is activity data for the selected date range.';
+        } else {
+            $maxValue = max($values);
+            $recommendation = '';
+    
+            if ($maxValue == $data->total_commuting) {
+                $recommendation =
+                    'Commuting is your highest activity. Consider focusing on improving your transportation habits for better efficiency and health.';
+            } elseif ($maxValue == $data->total_dietary) {
+                $recommendation =
+                    'Dietary habits are your strongest area. Keep up with your nutrition for sustained energy and well-being.';
+            } elseif ($maxValue == $data->total_energy) {
+                $recommendation =
+                    'Energy levels are high. You are maintaining a good balance of energy intake, keep it up!';
+            }
         }
     @endphp
     <div class="col-12">
