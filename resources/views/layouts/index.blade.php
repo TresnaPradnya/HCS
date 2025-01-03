@@ -36,6 +36,76 @@
 
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <style>
+        /* Card Styling */
+        .card {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Chart Images */
+        .card img {
+            border-radius: 10px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        /* User Avatar and Info */
+        .d-flex.align-items-center img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            border: 2px solid #007bff;
+        }
+
+        .d-flex.align-items-center h6 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .d-flex.align-items-center small {
+            color: #6c757d;
+        }
+
+        /* Chart Images in Post */
+        .chart-image {
+            max-width: 300px;
+            height: auto;
+            margin-right: 50px;  /* Adds space between the images */
+        }
+
+        /* Caption Text */
+        .card-text {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-style: italic; /* Adds emphasis to the caption text */
+        }
+
+        /* Buttons */
+        .card .btn {
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Flex layout for Buttons and Image */
+        .d-flex.justify-content-between {
+            margin-bottom: 1rem;
+        }
+
+        /* Make sure images are responsive */
+        .d-flex.justify-content-start img {
+            max-width: 400px;
+            height: auto;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -63,6 +133,40 @@
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <!-- Notification Count -->
+                        @php
+                            $unreadCount = auth()->user()->unreadNotifications->count();
+                        @endphp
+                        @if ($unreadCount > 0)
+                            <span class="badge badge-warning navbar-badge">{{ $unreadCount }}</span>
+                        @endif
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">{{ $unreadCount }} Notifications</span>
+                        <div class="dropdown-divider"></div>
+
+                        <!-- List Notifications -->
+                        @forelse (auth()->user()->unreadNotifications as $notification)
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i>
+                                {{ $notification->data['message'] }}
+                                <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                        @empty
+                            <a href="#" class="dropdown-item text-center text-muted">
+                                No new notifications
+                            </a>
+                        @endforelse
+
+                    </div>
+                </li>
+
+
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-user-circle mr-2"></i> {{ Auth::user()->name }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -70,10 +174,6 @@
                             <i class="fas fa-sign-out-alt mr-3"></i> Logout
                         </a>
                         <div class="dropdown-divider"></div>
-
-
-
-
                     </div>
                 </li>
                 <li class="nav-item">
@@ -183,6 +283,13 @@
                                     class="nav-link {{ Request::is('educational-contents*') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>Educational Content</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('posts.index') }}"
+                                    class="nav-link {{ Request::is('posts*') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Post</p>
                                 </a>
                             </li>
                         @endrole
