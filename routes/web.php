@@ -39,8 +39,12 @@ Route::resource('master-data/energy_sources', EnergySourceController::class)->na
 Route::resource('master-data/commuting_method', CommutingMethodController::class)->names('cm');
 Route::resource('master-data/dietary_preferences', DietaryPreferenceController::class)->names('dp');
 
+Route::middleware('auth')->group(function () {
+    Route::resource('posts', PostController::class)->only(['index', 'store', 'create', 'show', 'destroy']);
+});
 
-
+Route::post('/posts/{post}/interact', [PostInteractionController::class, 'store'])->name('posts.interact');
+Route::post('/posts/{post}/unlike', [PostInteractionController::class, 'unlike'])->name('posts.unlike');
 
 // Routes untuk Educational Content (Epic 6)
 Route::middleware('auth')->group(function () {
