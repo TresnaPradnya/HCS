@@ -31,6 +31,44 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form action="{{ route('posts.create') }}" method="GET" id="createPostForm">
+                @csrf
+                <input type="hidden" name="start_date" value="{{ $startDate }}">
+                <input type="hidden" name="end_date" value="{{ $endDate }}">
+                <input type="hidden" name="pie_chart_image" id="pie_chart_image">
+                <input type="hidden" name="line_chart_image" id="line_chart_image">
+                <input type="hidden" name="transportation_footprint" value="{{ $transportation_footprint }}">
+                <input type="hidden" name="energy_footprint" value="{{ $energy_footprint }}">
+                <input type="hidden" name="diet_footprint" value="{{ $diet_footprint }}">
+                <input type="hidden" name="total_footprint" value="{{ $total_footprint }}">
+
+                <button type="submit" class="btn btn-primary">Create Post</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Ensure the form has all required data before submission
+        document.getElementById('createPostForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (typeof footprintPieChart !== 'undefined' && typeof footprintLineChart !== 'undefined') {
+                // Convert charts to Base64 images
+                const pieChartImage = footprintPieChart.toBase64Image();
+                const lineChartImage = footprintLineChart.toBase64Image();
+
+                document.getElementById('pie_chart_image').value = pieChartImage;
+                document.getElementById('line_chart_image').value = lineChartImage;
+
+                e.target.submit();
+            } else {
+                alert('Error: Chart objects are not defined. Please ensure charts are properly initialized.');
+            }
+        });
+    </script>
+
     <!-- System Response: Summary of Footprints (Breakdown) -->
     <div class="row mb-4">
         <div class="col-md-4">
