@@ -79,14 +79,16 @@
         .chart-image {
             max-width: 300px;
             height: auto;
-            margin-right: 50px;  /* Adds space between the images */
+            margin-right: 50px;
+            /* Adds space between the images */
         }
 
         /* Caption Text */
         .card-text {
             font-size: 1rem;
             margin-bottom: 1rem;
-            font-style: italic; /* Adds emphasis to the caption text */
+            font-style: italic;
+            /* Adds emphasis to the caption text */
         }
 
         /* Buttons */
@@ -151,7 +153,8 @@
                             <a href="#" class="dropdown-item">
                                 <i class="fas fa-envelope mr-2"></i>
                                 {{ $notification->data['message'] }}
-                                <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+                                <span
+                                    class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
                             </a>
                             <div class="dropdown-divider"></div>
                         @empty
@@ -290,6 +293,13 @@
                                     class="nav-link {{ Request::is('posts*') ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-book"></i>
                                     <p>Post</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('historical-trends.index') }}"
+                                    class="nav-link {{ Request::is('historical-trends') ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-chart-line"></i>
+                                    <p>Historical Trends</p>
                                 </a>
                             </li>
                         @endrole

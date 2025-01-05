@@ -10,6 +10,8 @@ use App\Models\CommutingMethodsModel;
 use App\Models\HistoricalTracking;
 use App\Models\DietaryPreferencesModel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class ActivityLogController extends Controller
 {
@@ -59,6 +61,7 @@ class ActivityLogController extends Controller
             'energy_source_value' => 'required|numeric'
         ]);
 
+        // Simpan ke tabel activity_logs
         $activityLog = ActivityLog::create([
             'user_id' => Auth::id(),
             'commuting_method_id' => $request->commuting_method_id,
@@ -70,11 +73,23 @@ class ActivityLogController extends Controller
             'energy_source_value' => $request->energy_source_value
         ]);
 
-
-        return redirect()->route('al.index')->with([
-            'success' => 'Activity log created data successfully!'
+        // Sinkronisasi ke historical_trackings
+        $historical = HistoricalTracking::firstOrNew([
+            'user_id' => Auth::id(),
+            'date' => $request->date,
         ]);
+
+        // Update nilai historis
+        $historical->commuting_method_value += $request->commuting_method_value;
+        $historical->energy_source_value += $request->energy_source_value;
+        $historical->dietary_preference_value += 1; // Default value
+        $historical->carbon_footprint = $historical->commuting_method_value + $historical->energy_source_value + $historical->dietary_preference_value;
+
+        $historical->save();
+
+        return redirect()->route('al.index')->with('success', 'Activity log created and historical tracking updated successfully!');
     }
+
 
 
 
@@ -106,7 +121,6 @@ class ActivityLogController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $request->validate([
             'commuting_method_id' => 'required|exists:commuting_methods,id',
             'energy_source_id' => 'required|exists:energy_sources,id',
@@ -115,19 +129,36 @@ class ActivityLogController extends Controller
             'commuting_method_value' => 'required|numeric',
             'energy_source_value' => 'required|numeric'
         ]);
-        $al = ActivityLog::find($id);
-        $al->commuting_method_id = $request->commuting_method_id;
-        $al->energy_source_id = $request->energy_source_id;
-        $al->dietary_preference_id = $request->dietary_preference_id;
-        $al->date = $request->date;
-        $al->commuting_method_value = $request->commuting_method_value;
-        $al->dietary_preference_value = 1;
-        $al->energy_source_value = $request->energy_source_value;
-        $al->save();
-        return redirect()->route('al.index')->with([
-            'success' => 'Activity log updated successfully'
+
+        $activityLog = ActivityLog::findOrFail($id);
+
+        // Perbarui data activity_logs
+        $activityLog->update([
+            'commuting_method_id' => $request->commuting_method_id,
+            'energy_source_id' => $request->energy_source_id,
+            'dietary_preference_id' => $request->dietary_preference_id,
+            'date' => $request->date,
+            'commuting_method_value' => $request->commuting_method_value,
+            'dietary_preference_value' => 1,
+            'energy_source_value' => $request->energy_source_value,
         ]);
+
+        // Perbarui data di historical_trackings
+        $historical = HistoricalTracking::firstOrNew([
+            'user_id' => Auth::id(),
+            'date' => $request->date,
+        ]);
+
+        $historical->commuting_method_value = $request->commuting_method_value;
+        $historical->energy_source_value = $request->energy_source_value;
+        $historical->dietary_preference_value = 1; // Default value
+        $historical->carbon_footprint = $historical->commuting_method_value + $historical->energy_source_value + $historical->dietary_preference_value;
+
+        $historical->save();
+
+        return redirect()->route('al.index')->with('success', 'Activity log and historical tracking updated successfully!');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -139,5 +170,52 @@ class ActivityLogController extends Controller
         return redirect()->route('al.index')->with([
             'success' => 'Activity log deleted successfully'
         ]);
+    }
+    public function historicalTrends(Request $request)
+    {
+        // Ambil rentang tanggal dari request atau default ke 30 hari terakhir
+        $startDate = $request->start_date ?? now()->subDays(30)->format('Y-m-d');
+        $endDate = $request->end_date ?? now()->format('Y-m-d');
+
+        // Ambil data aktivitas dalam rentang waktu tertentu
+        $activityLogs = ActivityLog::whereBetween('date', [$startDate, $endDate])->get();
+
+        // Group data berdasarkan tanggal
+        $groupedData = $activityLogs->groupBy('date');
+
+        // Inisialisasi data untuk grafik
+        $dates = [];
+        $transportationHistory = [];
+        $energyHistory = [];
+        $dietHistory = [];
+
+        foreach ($groupedData as $date => $logs) {
+            $dates[] = $date;
+
+            // Hitung total per kategori
+            $transportationHistory[] = $logs->sum('commuting_method_value');
+            $energyHistory[] = $logs->sum('energy_source_value');
+            $dietHistory[] = $logs->sum('dietary_preference_value');
+        }
+
+        // Total seluruh jejak karbon
+        $transportationFootprint = $activityLogs->sum('commuting_method_value');
+        $energyFootprint = $activityLogs->sum('energy_source_value');
+        $dietFootprint = $activityLogs->sum('dietary_preference_value');
+        $totalFootprint = $transportationFootprint + $energyFootprint + $dietFootprint;
+
+        // Kirim data ke view
+        return view('historical_trends.index', compact(
+            'dates',
+            'transportationHistory',
+            'energyHistory',
+            'dietHistory',
+            'transportationFootprint',
+            'energyFootprint',
+            'dietFootprint',
+            'totalFootprint',
+            'startDate',
+            'endDate'
+        ));
     }
 }
