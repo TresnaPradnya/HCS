@@ -18,15 +18,20 @@
             $maxValue = max($values);
             $recommendation = '';
     
-            if ($maxValue == $data->total_commuting) {
+            if ($maxValue == $data->total_commuting) 
+            {
                 $recommendation =
-                    'Commuting is your highest activity. Consider focusing on improving your transportation habits for better efficiency and health.';
-            } elseif ($maxValue == $data->total_dietary) {
+                    'Based on the daily activities you input into the system,<span style="color: red;">commuting is identified as the major contributor to your carbon footprint.</span> Please consider enhancing your transportation habits for greater efficiency and health benefits, such as increasing your walking or using public transportation more often.';
+            } 
+            elseif ($maxValue == $data->total_dietary) 
+            {
                 $recommendation =
-                    'Dietary habits are your strongest area. Keep up with your nutrition for sustained energy and well-being.';
-            } elseif ($maxValue == $data->total_energy) {
+                    '<span style="color: red;">Dietary habits are your strongest area.</span> With choices ranging from vegan to heavy meat consumption, maintaining your nutritional focus is crucial for sustained energy and well-being. If you are looking to further reduce your carbon footprint, consider exploring more plant-based options like vegan or vegetarian diets.';
+            } 
+            elseif ($maxValue == $data->total_energy) 
+            {
                 $recommendation =
-                    'Energy levels are high. You are maintaining a good balance of energy intake, keep it up!';
+                '<span style="color: red;">Your energy consumption is higher than average.</span> To improve efficiency and reduce environmental impact, consider implementing energy-saving measures such as using LED lighting, optimizing heating and cooling systems, and unplugging devices when not in use.';
             }
         }
     @endphp
@@ -99,7 +104,7 @@
                         <h3 class="card-title">Recommendation</h3>
                     </div>
                     <div class="card-body text-center">
-                        <h3>{{ $recommendation }}</h3>
+                        <h3>{!! $recommendation !!}</h3>
                     </div>
                 </div>
             </div>
